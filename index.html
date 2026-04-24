@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI SQL Query Builder — Free Online SQL Generator</title>
+<meta name="description" content="Build complex SQL queries instantly with AI. Describe what you want in plain English and get SELECT, INSERT, UPDATE, DELETE, JOIN queries with explanations. Free, no signup.">
+<meta name="keywords" content="sql query builder, ai sql generator, sql from english, natural language sql, free sql tool">
+<meta property="og:title" content="AI SQL Query Builder — Free Online SQL Generator">
+<meta property="og:description" content="Describe what you want in plain English and get production-ready SQL queries instantly. Supports MySQL, PostgreSQL, SQLite, SQL Server.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://oliverwqcwrw.github.io/sql-query-builder/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AI SQL Query Builder",
+  "description": "Build complex SQL queries instantly with AI. Describe what you want in plain English.",
+  "url": "https://oliverwqcwrw.github.io/sql-query-builder/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+    --border: #30363d; --text: #e6edf3; --text2: #8b949e;
+    --blue: #58a6ff; --green: #3fb950; --orange: #d29922;
+    --purple: #bc8cff; --red: #f85149;
+  }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; min-height: 100vh; }
+  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
+  header .logo { font-size: 1.5rem; }
+  header h1 { font-size: 1.25rem; font-weight: 700; }
+  header p { color: var(--text2); font-size: 0.85rem; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; color: var(--blue); }
+  label { display: block; font-size: 0.85rem; color: var(--text2); margin-bottom: 6px; }
+  input, select, textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 10px 12px; font-size: 0.9rem; font-family: inherit; transition: border-color .2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); }
+  textarea { resize: vertical; min-height: 80px; }
+  .row { display: grid; gap: 12px; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media(max-width:600px) { .row-2, .row-3 { grid-template-columns: 1fr; } }
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #0d1117; border: none; border-radius: 6px; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+  .provider-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .provider-card { background: var(--bg3); border: 2px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: border-color .2s; }
+  .provider-card.active { border-color: var(--blue); }
+  .provider-card .name { font-weight: 600; font-size: 0.9rem; }
+  .provider-card .badge { display: inline-block; background: var(--green); color: #000; font-size: 0.7rem; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+  .provider-card .badge.paid { background: var(--orange); }
+  .provider-card input { margin-top: 8px; font-size: 0.8rem; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .tab { padding: 8px 16px; font-size: 0.85rem; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+  code, .code-block { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
+  .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 16px; font-size: 0.85rem; white-space: pre-wrap; position: relative; min-height: 80px; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 5px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer; }
+  .copy-btn:hover { color: var(--text); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .tag { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 0.8rem; color: var(--text2); cursor: pointer; transition: all .2s; }
+  .tag:hover, .tag.active { background: var(--blue); color: #000; border-color: var(--blue); }
+  .status { padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-top: 12px; }
+  .status.error { background: rgba(248,81,73,.1); border: 1px solid rgba(248,81,73,.3); color: var(--red); }
+  .status.loading { background: rgba(88,166,255,.1); border: 1px solid rgba(88,166,255,.3); color: var(--blue); }
+  .status.success { background: rgba(63,185,80,.1); border: 1px solid rgba(63,185,80,.3); color: var(--green); }
+  .history-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: border-color .2s; }
+  .history-item:hover { border-color: var(--blue); }
+  .history-item .q { font-size: 0.85rem; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history-item .d { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+  .schema-field { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .schema-field input { flex: 1; }
+  .schema-field select { width: 140px; flex-shrink: 0; }
+  .schema-field button { background: none; border: 1px solid var(--border); color: var(--red); border-radius: 4px; padding: 6px 10px; cursor: pointer; font-size: 0.8rem; }
+  .donation-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-top: 32px; text-align: center; }
+  .donation-section h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .donation-section p { color: var(--text2); font-size: 0.9rem; margin-bottom: 20px; }
+  .crypto-cards { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .crypto-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; width: 180px; }
+  .crypto-card img { border-radius: 4px; margin-bottom: 8px; }
+  .crypto-card .cname { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .crypto-card .addr { font-size: 0.65rem; color: var(--text2); word-break: break-all; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+  select option { background: var(--bg2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🗄️</div>
+  <div>
+    <h1>AI SQL Query Builder</h1>
+    <p>Describe what you want in plain English → get production-ready SQL instantly</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- AI Provider Setup -->
+  <div class="card">
+    <h2>⚡ AI Provider</h2>
+    <div class="provider-grid" id="providerGrid">
+      <div class="provider-card active" data-provider="groq" onclick="selectProvider('groq')">
+        <div class="name">Groq <span class="badge">Free</span></div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">llama-3.3-70b-versatile</div>
+        <input type="password" id="key_groq" placeholder="gsk_..." oninput="saveKey('groq',this.value)">
+      </div>
+      <div class="provider-card" data-provider="openrouter" onclick="selectProvider('openrouter')">
+        <div class="name">OpenRouter <span class="badge">Free</span></div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">llama-3.3-70b-instruct:free</div>
+        <input type="password" id="key_openrouter" placeholder="sk-or-..." oninput="saveKey('openrouter',this.value)">
+      </div>
+      <div class="provider-card" data-provider="deepseek" onclick="selectProvider('deepseek')">
+        <div class="name">DeepSeek <span class="badge paid">Low Cost</span></div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">deepseek-chat</div>
+        <input type="password" id="key_deepseek" placeholder="sk-..." oninput="saveKey('deepseek',this.value)">
+      </div>
+      <div class="provider-card" data-provider="openai" onclick="selectProvider('openai')">
+        <div class="name">OpenAI <span class="badge paid">Paid</span></div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">gpt-4o-mini</div>
+        <input type="password" id="key_openai" placeholder="sk-..." oninput="saveKey('openai',this.value)">
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text2);margin-top:10px">🔒 API keys stored in your browser only. Never sent to our servers.</p>
+  </div>
+
+  <!-- Schema Builder -->
+  <div class="card">
+    <h2>📐 Table Schema (Optional)</h2>
+    <p style="font-size:0.82rem;color:var(--text2);margin-bottom:12px">Define your table structure for more accurate queries.</p>
+    <div class="row row-2" style="margin-bottom:10px">
+      <div>
+        <label>Table Name</label>
+        <input type="text" id="tableName" placeholder="e.g. users, orders, products" value="users">
+      </div>
+      <div>
+        <label>Database Type</label>
+        <select id="dbType">
+          <option value="PostgreSQL">PostgreSQL</option>
+          <option value="MySQL">MySQL</option>
+          <option value="SQLite">SQLite</option>
+          <option value="SQL Server">SQL Server</option>
+          <option value="Oracle">Oracle</option>
+        </select>
+      </div>
+    </div>
+    <div id="schemaFields">
+      <div class="schema-field">
+        <input type="text" placeholder="Column name" value="id">
+        <select><option>INT</option><option>VARCHAR</option><option>TEXT</option><option>BOOLEAN</option><option>DATE</option><option>TIMESTAMP</option><option>FLOAT</option><option>DECIMAL</option><option>JSON</option></select>
+        <button onclick="this.parentElement.remove()">✕</button>
+      </div>
+      <div class="schema-field">
+        <input type="text" placeholder="Column name" value="name">
+        <select><option>INT</option><option selected>VARCHAR</option><option>TEXT</option><option>BOOLEAN</option><option>DATE</option><option>TIMESTAMP</option><option>FLOAT</option><option>DECIMAL</option><option>JSON</option></select>
+        <button onclick="this.parentElement.remove()">✕</button>
+      </div>
+      <div class="schema-field">
+        <input type="text" placeholder="Column name" value="email">
+        <select><option>INT</option><option selected>VARCHAR</option><option>TEXT</option><option>BOOLEAN</option><option>DATE</option><option>TIMESTAMP</option><option>FLOAT</option><option>DECIMAL</option><option>JSON</option></select>
+        <button onclick="this.parentElement.remove()">✕</button>
+      </div>
+      <div class="schema-field">
+        <input type="text" placeholder="Column name" value="created_at">
+        <select><option>INT</option><option>VARCHAR</option><option>TEXT</option><option>BOOLEAN</option><option>DATE</option><option selected>TIMESTAMP</option><option>FLOAT</option><option>DECIMAL</option><option>JSON</option></select>
+        <button onclick="this.parentElement.remove()">✕</button>
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-sm" style="margin-top:8px" onclick="addField()">+ Add Column</button>
+  </div>
+
+  <!-- Query Builder -->
+  <div class="card">
+    <h2>✍️ Describe Your Query</h2>
+    <div style="margin-bottom:12px">
+      <label>Quick Templates</label>
+      <div class="tags">
+        <span class="tag" onclick="useTemplate('select all')">SELECT all</span>
+        <span class="tag" onclick="useTemplate('find recent')">Find recent</span>
+        <span class="tag" onclick="useTemplate('count by group')">Count by group</span>
+        <span class="tag" onclick="useTemplate('join tables')">JOIN tables</span>
+        <span class="tag" onclick="useTemplate('insert new record')">INSERT record</span>
+        <span class="tag" onclick="useTemplate('update records')">UPDATE records</span>
+        <span class="tag" onclick="useTemplate('delete old records')">DELETE old</span>
+        <span class="tag" onclick="useTemplate('aggregate stats')">Aggregate stats</span>
+        <span class="tag" onclick="useTemplate('subquery')">Subquery</span>
+        <span class="tag" onclick="useTemplate('pagination')">Pagination</span>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label>Describe what you want *</label>
+      <textarea id="queryDesc" rows="4" placeholder="e.g. Get all users who signed up in the last 30 days, ordered by created_at descending, with their total order count from the orders table"></textarea>
+    </div>
+    <div class="row row-2" style="margin-bottom:12px">
+      <div>
+        <label>Query Type</label>
+        <select id="queryType">
+          <option value="SELECT">SELECT</option>
+          <option value="INSERT">INSERT</option>
+          <option value="UPDATE">UPDATE</option>
+          <option value="DELETE">DELETE</option>
+          <option value="CREATE TABLE">CREATE TABLE</option>
+          <option value="any">Let AI decide</option>
+        </select>
+      </div>
+      <div>
+        <label>Complexity</label>
+        <select id="complexity">
+          <option value="simple">Simple (single table)</option>
+          <option value="medium" selected>Medium (JOINs, subqueries)</option>
+          <option value="complex">Complex (CTEs, window functions)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" id="generateBtn" onclick="generateQuery()">
+      <span>✨ Generate SQL</span>
+    </button>
+  </div>
+
+  <!-- Output -->
+  <div class="card" id="outputCard" style="display:none">
+    <h2>📋 Generated SQL</h2>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('sql')">SQL Query</div>
+      <div class="tab" onclick="switchTab('explanation')">Explanation</div>
+      <div class="tab" onclick="switchTab('optimized')">Optimized Version</div>
+    </div>
+    <div id="tab-sql">
+      <div class="output-box code-block" id="sqlOutput"></div>
+      <button class="copy-btn" onclick="copyOutput('sqlOutput')">Copy</button>
+    </div>
+    <div id="tab-explanation" style="display:none">
+      <div class="output-box" id="explanationOutput" style="font-family:inherit;font-size:0.88rem;line-height:1.7"></div>
+    </div>
+    <div id="tab-optimized" style="display:none">
+      <div class="output-box code-block" id="optimizedOutput"></div>
+      <button class="copy-btn" onclick="copyOutput('optimizedOutput')">Copy</button>
+    </div>
+    <div id="statusMsg"></div>
+  </div>
+
+  <!-- SQL Explainer -->
+  <div class="card">
+    <h2>🔍 SQL Explainer</h2>
+    <p style="font-size:0.82rem;color:var(--text2);margin-bottom:12px">Paste an existing SQL query to get a plain-English explanation.</p>
+    <textarea id="explainInput" rows="5" placeholder="Paste SQL query here..."></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn" onclick="explainSQL()"><span>🔎 Explain SQL</span></button>
+      <button class="btn btn-secondary" onclick="optimizeSQL()"><span>⚡ Optimize SQL</span></button>
+    </div>
+    <div id="explainOutput" style="display:none;margin-top:12px">
+      <div class="output-box" id="explainResult" style="font-family:inherit;font-size:0.88rem;line-height:1.7"></div>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="card">
+    <h2>📚 Query History</h2>
+    <div id="historyList">
+      <p style="color:var(--text2);font-size:0.85rem">No history yet. Generated queries will appear here.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" style="margin-top:8px" onclick="clearHistory()">Clear History</button>
+  </div>
+
+  <!-- Donation -->
+  <div class="donation-section">
+    <h3>☕ Support This Tool</h3>
+    <p>Built with ❤️ and kept free forever. If it saves you time, consider a small tip!</p>
+    <div class="crypto-cards">
+      <div class="crypto-card">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=TSvC67jexputnNHayVR8fpScwFmwvZV8jp" alt="USDT QR" width="110" height="110">
+        <div class="cname">USDT (TRC-20)</div>
+        <div class="addr">TSvC67jexputnNHayVR8fpScwFmwvZV8jp</div>
+      </div>
+      <div class="crypto-card">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=0x11e764fac3fcd4be16da43a252a62b156e06a632" alt="ETH QR" width="110" height="110">
+        <div class="cname">ETH (ERC-20)</div>
+        <div class="addr">0x11e764fac3fcd4be16da43a252a62b156e06a632</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PROVIDERS = {
+  groq: { url: 'https://api.groq.com/openai/v1/chat/completions', model: 'llama-3.3-70b-versatile' },
+  openrouter: { url: 'https://openrouter.ai/api/v1/chat/completions', model: 'meta-llama/llama-3.3-70b-instruct:free' },
+  deepseek: { url: 'https://api.deepseek.com/v1/chat/completions', model: 'deepseek-chat' },
+  openai: { url: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o-mini' }
+};
+
+let currentProvider = 'groq';
+let history = JSON.parse(localStorage.getItem('sqlqb_history') || '[]');
+
+// Init
+document.querySelectorAll('[id^="key_"]').forEach(el => {
+  const p = el.id.replace('key_', '');
+  el.value = localStorage.getItem('sqlqb_key_' + p) || '';
+});
+renderHistory();
+
+function selectProvider(p) {
+  currentProvider = p;
+  document.querySelectorAll('.provider-card').forEach(c => c.classList.toggle('active', c.dataset.provider === p));
+}
+
+function saveKey(p, v) {
+  localStorage.setItem('sqlqb_key_' + p, v);
+}
+
+function getKey() {
+  return localStorage.getItem('sqlqb_key_' + currentProvider) || document.getElementById('key_' + currentProvider)?.value || '';
+}
+
+function getSchema() {
+  const table = document.getElementById('tableName').value.trim();
+  const dbType = document.getElementById('dbType').value;
+  const fields = [];
+  document.querySelectorAll('#schemaFields .schema-field').forEach(row => {
+    const name = row.querySelector('input').value.trim();
+    const type = row.querySelector('select').value;
+    if (name) fields.push(`${name} ${type}`);
+  });
+  return { table, dbType, fields };
+}
+
+async function callAI(prompt) {
+  const key = getKey();
+  if (!key) throw new Error('Please enter an API key for ' + currentProvider);
+  const cfg = PROVIDERS[currentProvider];
+  const res = await fetch(cfg.url, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: cfg.model, messages: [{ role: 'user', content: prompt }], temperature: 0.1 })
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`API error ${res.status}: ${err.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  return data.choices[0].message.content;
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById('statusMsg');
+  el.className = 'status ' + type;
+  el.textContent = msg;
+  el.style.display = msg ? '' : 'none';
+}
+
+function setBtnLoading(id, loading) {
+  const btn = document.getElementById(id);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Generating...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨ Generate SQL</span>';
+  }
+}
+
+async function generateQuery() {
+  const desc = document.getElementById('queryDesc').value.trim();
+  if (!desc) { alert('Please describe your query'); return; }
+  const schema = getSchema();
+  const dbType = schema.dbType;
+  const queryType = document.getElementById('queryType').value;
+  const complexity = document.getElementById('complexity').value;
+  
+  let schemaInfo = '';
+  if (schema.table && schema.fields.length) {
+    schemaInfo = `\nTable: ${schema.table}\nColumns: ${schema.fields.join(', ')}`;
+  }
+
+  const prompt = `You are a SQL expert. Generate a ${queryType === 'any' ? '' : queryType + ' '}SQL query for ${dbType}.
+
+User request: ${desc}
+${schemaInfo ? 'Schema:' + schemaInfo : ''}
+Complexity preference: ${complexity}
+
+Respond in this exact JSON format:
+{
+  "sql": "the SQL query here",
+  "explanation": "plain English explanation of what the query does, step by step",
+  "optimized": "an optimized version of the query with comments explaining optimizations, or same as sql if already optimal"
+}
+
+Rules:
+- Use proper ${dbType} syntax
+- Add helpful SQL comments with --
+- For complex queries, use CTEs for readability
+- Ensure the query is production-ready and handles edge cases
+- Only return valid JSON, no markdown`;
+
+  setBtnLoading('generateBtn', true);
+  setStatus('Generating SQL...', 'loading');
+  document.getElementById('outputCard').style.display = 'block';
+  document.getElementById('sqlOutput').textContent = '';
+  document.getElementById('explanationOutput').textContent = '';
+  document.getElementById('optimizedOutput').textContent = '';
+
+  try {
+    const result = await callAI(prompt);
+    let parsed;
+    try {
+      const jsonMatch = result.match(/\{[\s\S]*\}/);
+      parsed = JSON.parse(jsonMatch ? jsonMatch[0] : result);
+    } catch {
+      parsed = { sql: result, explanation: 'See SQL tab for the generated query.', optimized: result };
+    }
+    
+    document.getElementById('sqlOutput').textContent = parsed.sql || result;
+    document.getElementById('explanationOutput').textContent = parsed.explanation || '';
+    document.getElementById('optimizedOutput').textContent = parsed.optimized || parsed.sql || result;
+    setStatus('✓ SQL generated successfully!', 'success');
+    
+    // Save to history
+    addToHistory(desc, parsed.sql || result);
+  } catch(e) {
+    setStatus('Error: ' + e.message, 'error');
+  }
+  setBtnLoading('generateBtn', false);
+}
+
+async function explainSQL() {
+  const sql = document.getElementById('explainInput').value.trim();
+  if (!sql) { alert('Please paste a SQL query'); return; }
+  
+  const prompt = `Explain this SQL query in plain English. Break it down step by step, explain what each clause does, and describe the expected output.
+
+SQL:
+${sql}
+
+Be clear and educational. Format with numbered steps.`;
+
+  document.getElementById('explainOutput').style.display = 'block';
+  document.getElementById('explainResult').textContent = 'Analyzing...';
+  
+  try {
+    const result = await callAI(prompt);
+    document.getElementById('explainResult').textContent = result;
+  } catch(e) {
+    document.getElementById('explainResult').textContent = 'Error: ' + e.message;
+  }
+}
+
+async function optimizeSQL() {
+  const sql = document.getElementById('explainInput').value.trim();
+  if (!sql) { alert('Please paste a SQL query to optimize'); return; }
+  
+  const dbType = document.getElementById('dbType').value;
+  const prompt = `Analyze and optimize this ${dbType} SQL query. Suggest improvements for performance, readability, and best practices. Provide the optimized version with comments.
+
+Original SQL:
+${sql}
+
+Return the optimized SQL followed by a brief explanation of changes made.`;
+
+  document.getElementById('explainOutput').style.display = 'block';
+  document.getElementById('explainResult').textContent = 'Optimizing...';
+  
+  try {
+    const result = await callAI(prompt);
+    document.getElementById('explainResult').textContent = result;
+  } catch(e) {
+    document.getElementById('explainResult').textContent = 'Error: ' + e.message;
+  }
+}
+
+function switchTab(tab) {
+  ['sql', 'explanation', 'optimized'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['sql','explanation','optimized'][i] === tab);
+  });
+}
+
+function copyOutput(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+function addField() {
+  const div = document.createElement('div');
+  div.className = 'schema-field';
+  div.innerHTML = `<input type="text" placeholder="Column name"><select><option>INT</option><option>VARCHAR</option><option>TEXT</option><option>BOOLEAN</option><option>DATE</option><option>TIMESTAMP</option><option>FLOAT</option><option>DECIMAL</option><option>JSON</option></select><button onclick="this.parentElement.remove()">✕</button>`;
+  document.getElementById('schemaFields').appendChild(div);
+}
+
+const TEMPLATES = {
+  'select all': 'Get all records from the table, limit to 100 results',
+  'find recent': 'Find all records created in the last 7 days, ordered by newest first',
+  'count by group': 'Count the number of records grouped by a category, order by count descending',
+  'join tables': 'Join users with orders to get each user\'s total order count and sum',
+  'insert new record': 'Insert a new record with sample values for all fields',
+  'update records': 'Update the status field to "active" for all records where created_at is older than 30 days',
+  'delete old records': 'Delete all records where created_at is older than 1 year',
+  'aggregate stats': 'Calculate min, max, average, and count statistics for numeric columns',
+  'subquery': 'Find all records where the value is above the average using a subquery',
+  'pagination': 'Get page 2 of results with 20 items per page, ordered by id'
+};
+
+function useTemplate(t) {
+  document.getElementById('queryDesc').value = TEMPLATES[t] || t;
+  document.querySelectorAll('.tag').forEach(el => el.classList.toggle('active', el.textContent.trim() === t));
+}
+
+function addToHistory(desc, sql) {
+  history.unshift({ desc, sql, time: new Date().toLocaleString() });
+  if (history.length > 20) history.pop();
+  localStorage.setItem('sqlqb_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('historyList');
+  if (!history.length) {
+    el.innerHTML = '<p style="color:var(--text2);font-size:0.85rem">No history yet. Generated queries will appear here.</p>';
+    return;
+  }
+  el.innerHTML = history.map((h, i) => `
+    <div class="history-item" onclick="loadHistory(${i})">
+      <div class="q">📝 ${h.desc}</div>
+      <div class="d">🕐 ${h.time}</div>
+    </div>`).join('');
+}
+
+function loadHistory(i) {
+  document.getElementById('queryDesc').value = history[i].desc;
+  document.getElementById('sqlOutput').textContent = history[i].sql;
+  document.getElementById('outputCard').style.display = 'block';
+  switchTab('sql');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function clearHistory() {
+  history = [];
+  localStorage.removeItem('sqlqb_history');
+  renderHistory();
+}
+</script>
+</body>
+</html>
